@@ -44,7 +44,7 @@ public class Botti {
             while (true) {
                 while ((line = lukija.readLine()) != null) {
                     if (parser.nWordFromMsg(parser.protocolMsg(line), 2).contains("001")) {
-                        kirjoittaja.write("JOIN #supadeltat\n");
+                        kirjoittaja.write("JOIN #testi123\n");
                         System.out.println(line);
                         kirjoittaja.flush();
                     } else if (parser.nWordFromMsg(parser.protocolMsg(line), 1).equalsIgnoreCase("PING")) {
