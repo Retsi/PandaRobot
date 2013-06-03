@@ -20,11 +20,13 @@ public class Botti {
     private String line;
     
     private Parser parser;
+    private HTMLtool htmltool;
     
     public Botti(String server, int port){
         this.portti = port;
         this.serveri = server;
         this.parser = new Parser();
+        this.htmltool = new HTMLtool();
     }
     
     public void connect() throws IOException{
@@ -44,7 +46,7 @@ public class Botti {
             while(true){
                 while((line = lukija.readLine()) != null){
                     if(parser.nWordFromMsg(parser.protocolMsg(line), 2).contains("001")){
-                        kirjoittaja.write("JOIN #testi123\n");
+                        kirjoittaja.write("JOIN #supadeltat\n");
                         System.out.println(line);
                         kirjoittaja.flush();
                     }
@@ -58,6 +60,13 @@ public class Botti {
                         kirjoittaja.write("PRIVMSG "+ parser.channelProt(parser.protocolMsg(line))+" :"+parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))+"\n");
                         System.out.println(line);
                         System.out.print("Vastaus: PRIVMSG "+ parser.channelProt(parser.protocolMsg(line))+" :"+parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))+"\n");
+                        kirjoittaja.flush();
+                    }
+                    else if(parser.msg(line).contains("https://") || parser.msg(line).contains("http://")){
+                        String title = htmltool.getPageTitle(htmltool.getSource(parser.url(parser.msg(line))));
+                        kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) +" :Page title: [ "+title+" ]\n");
+                        System.out.println(line);
+                        System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) +" :"+title+"\n");
                         kirjoittaja.flush();
                     }
                     else
