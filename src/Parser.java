@@ -136,8 +136,6 @@ public class Parser {
             if(addy.charAt(i) == ' ')
                 addy = addy.substring(0, i);
         }
-//        if(addy.charAt(0) == '~')
-//            addy = addy.substring(1);
         return addy;
     }
     
