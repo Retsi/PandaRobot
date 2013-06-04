@@ -11,7 +11,7 @@ public class Parser {
     
     public String protocolMsg(String msg){
         
-        String ret ="";
+        String ret = msg; // was String ret = "";
         
         for(int i = 1; i < msg.length(); i++){
             if(msg.charAt(i) == ':'){
@@ -101,6 +101,8 @@ public class Parser {
             for(int i = 0; i< msg.length(); i++){
                 if(msg.charAt(i) == '#'){
                     for(int j = i+1; j<msg.length(); j++){
+                        if (j == msg.length()-1)
+                            return msg.substring(i, j+1).trim();
                         if(msg.charAt(j) == ' ')
                             return msg.substring(i, j).trim();
                     }
@@ -120,6 +122,23 @@ public class Parser {
                 afterFirst = afterFirst + nWordFromMsg(msg, i);
         }
         return afterFirst;
+    }
+    
+    public String getAddy(String msg){
+        
+        String addy = "";
+        
+        for(int i = 0; i<msg.length(); i++){
+            if(msg.charAt(i) == '!')
+                addy = msg.substring(i+1);
+        }
+        for(int i = 0; i< addy.length(); i++){
+            if(addy.charAt(i) == ' ')
+                addy = addy.substring(0, i);
+        }
+//        if(addy.charAt(0) == '~')
+//            addy = addy.substring(1);
+        return addy;
     }
     
 }
