@@ -19,10 +19,10 @@ public class HTMLtool {
         try {
             URLConnection connection = urli.openConnection();
             connection.connect();
-            Scanner lukija = new Scanner(connection.getInputStream());
+            Scanner reader = new Scanner(connection.getInputStream());
 
-            while (lukija.hasNextLine()) {
-                source += lukija.nextLine();
+            while (reader.hasNextLine()) {
+                source += reader.nextLine();
             }
 
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class HTMLtool {
                 int j = i + 6;
                 if (source.substring(i, j).equalsIgnoreCase("<title")) {
 
-                    return titleHaku(source, i);
+                    return titleSearch(source, i);
                 }
             }
         }
@@ -49,18 +49,22 @@ public class HTMLtool {
         return "";
     }
 
-    public String titleHaku(String source, int taginAlku) {
+    public String titleSearch(String source, int tagIndex) {
 
         String title = "";
 
-        for (int i = taginAlku; i < source.length(); i++) {
+        for (int i = tagIndex; i < source.length(); i++) {
             if (source.charAt(i) == '>') {
                 for (int j = i+1; j+6 < source.length(); j++) {
                     if (source.substring(j, j + 6).equalsIgnoreCase("</titl")) {
-                        if(title.charAt(0) == ' ')
-                            return title.substring(1);
-                        else
-                            return title;
+                        while(title.charAt(0) == ' ' && title.length()>1)
+                            title = title.substring(1);
+                        while(title.charAt(title.length()-1) == ' ' && title.length()>1)
+                            title = title.substring(0, title.length()-1);
+                        if(title.equals(" "))
+                            title = "";
+                        return title;
+                            
                     } else {
                         title = title + source.charAt(j);
                     }
