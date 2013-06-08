@@ -21,6 +21,7 @@ public class Botti {
     private Parser parser;
     private HTMLtool htmltool;
     private UserModes usermodes;
+    private Weather weather;
     
     private String masteraddy = "";
 
@@ -30,6 +31,7 @@ public class Botti {
         this.parser = new Parser();
         this.htmltool = new HTMLtool();
         this.usermodes = new UserModes();
+        this.weather = new Weather();
         
     }
 
@@ -52,7 +54,7 @@ public class Botti {
             while (true) {
                 while ((line = lukija.readLine()) != null) {
                     if (parser.nWordFromMsg(parser.protocolMsg(line), 2).contains("001")) {
-                        kirjoittaja.write("JOIN #testi123\n");
+                        kirjoittaja.write("JOIN #supadeltat\n");
                         System.out.println(line);
                         kirjoittaja.flush();
                     } 
@@ -107,6 +109,12 @@ public class Botti {
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :removed\n");
                         System.out.println(line);
                         System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :removed\n");
+                        kirjoittaja.flush();
+                    }
+                    else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!w")){
+                        kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + weather.getForecast(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))) + "\n");
+                        System.out.println(line);
+                        System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + weather.getForecast(parser.nWordFromMsg(parser.msg(line), 2)) + "\n");
                         kirjoittaja.flush();
                     }
                     
