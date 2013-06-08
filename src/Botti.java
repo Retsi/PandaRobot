@@ -22,7 +22,7 @@ public class Botti {
     private HTMLtool htmltool;
     private UserModes usermodes;
     
-    private String masteraddy;
+    private String masteraddy = "";
 
     public Botti(String server, int port) {
         this.portti = port;
@@ -52,7 +52,7 @@ public class Botti {
             while (true) {
                 while ((line = lukija.readLine()) != null) {
                     if (parser.nWordFromMsg(parser.protocolMsg(line), 2).contains("001")) {
-                        kirjoittaja.write("JOIN #supadeltat\n");
+                        kirjoittaja.write("JOIN #testi123\n");
                         System.out.println(line);
                         kirjoittaja.flush();
                     } 
@@ -68,6 +68,13 @@ public class Botti {
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + parser.everythingElseExceptFirstWordFromMsg(parser.msg(line)) + "\n");
                         System.out.println(line);
                         System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + parser.everythingElseExceptFirstWordFromMsg(parser.msg(line)) + "\n");
+                        kirjoittaja.flush();
+                    }
+                    
+                    else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!raw") && parser.protocolMsg(line).contains(masteraddy)) {
+                        kirjoittaja.write(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))+"\n");
+                        System.out.println(line);
+                        System.out.print(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))+"\n");
                         kirjoittaja.flush();
                     }
                     
@@ -115,7 +122,6 @@ public class Botti {
                     
                     else if(parser.protocolMsg(line).contains("JOIN") && usermodes.getOpList().containsKey(parser.getAddy(parser.protocolMsg(line)))){
                         System.out.println(line);
-                        System.out.print("Vastaus: MODE " + parser.channelProt(parser.protocolMsg(line))+ " +o "+ parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
                         if(usermodes.getUsersOpChannels(parser.getAddy(parser.protocolMsg(line))).contains(parser.channelProt(parser.channelProt(line)))){
                             kirjoittaja.write("MODE " + parser.channelProt(parser.protocolMsg(line))+ " +o "+ parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
                             System.out.print("Vastaus: MODE " + parser.channelProt(parser.protocolMsg(line))+ " +o "+ parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
@@ -124,6 +130,7 @@ public class Botti {
                     }
                     
                     else if(parser.protocolMsg(line).contains("JOIN") && usermodes.getVoiceList().containsKey(parser.getAddy(parser.protocolMsg(line)))){
+                        System.out.println(line);
                         if(usermodes.getUsersVoiceChannels(parser.getAddy(parser.protocolMsg(line))).contains(parser.channelProt(parser.channelProt(line)))){
                             kirjoittaja.write("MODE " + parser.channelProt(parser.protocolMsg(line))+ " +v "+ parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
                             System.out.print("Vastaus: MODE " + parser.channelProt(parser.protocolMsg(line))+ " +v "+ parser.nickProtMsg(parser.protocolMsg(line)) + "\n");

@@ -56,13 +56,19 @@ public class Parser {
         return "";
     }
     
-    public int numberOfWordsOnMessage(String msg){
+    public int numberOfWordsOnMessage(String message){
+        
+        String msg = message;
+        
         if(msg.equals(""))
             return 0;
         else if(!msg.contains(" ")){
             return 1;
         }
         else{
+            msg = removeWhiteSpaceBothEndsOfMessage(msg);
+            if (msg.equals(" "))
+                return 0;
             int numberOfWords = 1;
             for (int i = 0; i < msg.length(); i++){
                 if (msg.charAt(i) == ' ')
@@ -70,6 +76,21 @@ public class Parser {
             }
             return numberOfWords;
         }
+    }
+    
+    public String removeWhiteSpaceBothEndsOfMessage(String msg){
+        
+        String message = msg;
+        
+        while(message.charAt(0) == ' ' && message.length()>1){
+            message = message.substring(1);
+        }
+        
+        while(message.charAt(message.length()-1) == ' ' && message.length() > 1){
+            message = message.substring(0, message.length()-1);
+        }
+        
+        return message;
     }
     
     public String url(String msg){
