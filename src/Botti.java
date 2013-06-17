@@ -17,12 +17,10 @@ public class Botti {
     private BufferedReader lukija;
     private BufferedWriter kirjoittaja;
     private String line;
-    
     private Parser parser;
     private HTMLtool htmltool;
     private UserModes usermodes;
     private Weather weather;
-    
     private String masteraddy = "";
 
     public Botti(String server, int port) {
@@ -32,7 +30,7 @@ public class Botti {
         this.htmltool = new HTMLtool();
         this.usermodes = new UserModes();
         this.weather = new Weather();
-        
+
     }
 
     public void connect() throws IOException {
@@ -42,7 +40,7 @@ public class Botti {
             socket = new Socket(serveri, portti);
             lukija = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             kirjoittaja = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            
+
             masteraddy = "@cs27003181.pp.htv.fi";
 
             kirjoittaja.write("NICK PandaRobot\n");
@@ -54,32 +52,43 @@ public class Botti {
             while (true) {
                 while ((line = lukija.readLine()) != null) {
                     if (parser.nWordFromMsg(parser.protocolMsg(line), 2).contains("001")) {
-                        kirjoittaja.write("JOIN #supadeltat\n");
+                        kirjoittaja.write("JOIN #testi123\n");
                         System.out.println(line);
                         kirjoittaja.flush();
-                    } 
-                    
+                    }
                     else if (parser.nWordFromMsg(parser.protocolMsg(line), 1).equalsIgnoreCase("PING")) {
                         kirjoittaja.write("PONG :" + parser.msg(line) + "\n");
                         System.out.println(line);
                         System.out.print("Vastaus: PONG :" + parser.msg(line) + "\n");
                         kirjoittaja.flush();
-                    } 
-                    
+                    }
                     else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!huuda")) {
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + parser.everythingElseExceptFirstWordFromMsg(parser.msg(line)) + "\n");
                         System.out.println(line);
                         System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + parser.everythingElseExceptFirstWordFromMsg(parser.msg(line)) + "\n");
                         kirjoittaja.flush();
                     }
-                    
-                    else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!raw") && parser.protocolMsg(line).contains(masteraddy)) {
-                        kirjoittaja.write(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))+"\n");
+                    else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!remind")) {
                         System.out.println(line);
-                        System.out.print(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))+"\n");
+                        try {
+
+                            Reminder reminder = new Reminder(kirjoittaja, Integer.parseInt(parser.nWordFromMsg(parser.msg(line), 2)), parser.everythingElseExceptFirstWordFromMsg(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))), parser.channelProt(parser.protocolMsg(line)), parser.nickProtMsg(parser.protocolMsg(line)));
+                            reminder.start();
+                            kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :launched\n");
+                            kirjoittaja.flush();
+                            System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :launched\n");
+                        } catch (NumberFormatException e) {
+                            kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Missing time parameter\n");
+                            kirjoittaja.flush();
+                        }
+
+                    }
+                    else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!raw") && parser.protocolMsg(line).contains(masteraddy)) {
+                        kirjoittaja.write(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line)) + "\n");
+                        System.out.println(line);
+                        System.out.print(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line)) + "\n");
                         kirjoittaja.flush();
                     }
-                    
                     else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!addop") && parser.protocolMsg(line).contains(masteraddy)) {
                         usermodes.addUserToOpList(parser.nWordFromMsg(parser.msg(line), 2), parser.channelProt(parser.protocolMsg(line)));
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :added\n");
@@ -87,7 +96,6 @@ public class Botti {
                         System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :added\n");
                         kirjoittaja.flush();
                     }
-                    
                     else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!addvoice") && parser.protocolMsg(line).contains(masteraddy)) {
                         usermodes.addUserToVoiceList(parser.nWordFromMsg(parser.msg(line), 2), parser.channelProt(parser.protocolMsg(line)));
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :added\n");
@@ -95,7 +103,6 @@ public class Botti {
                         System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :added\n");
                         kirjoittaja.flush();
                     }
-                    
                     else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!removeop") && parser.protocolMsg(line).contains(masteraddy)) {
                         usermodes.removeUserFromOpList(parser.nWordFromMsg(parser.msg(line), 2), parser.channelProt(parser.protocolMsg(line)));
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :removed\n");
@@ -103,7 +110,6 @@ public class Botti {
                         System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :removed\n");
                         kirjoittaja.flush();
                     }
-                    
                     else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!removevoice") && parser.protocolMsg(line).contains(masteraddy)) {
                         usermodes.removeUserFromVoiceList(parser.nWordFromMsg(parser.msg(line), 2), parser.channelProt(parser.protocolMsg(line)));
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :removed\n");
@@ -111,13 +117,12 @@ public class Botti {
                         System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :removed\n");
                         kirjoittaja.flush();
                     }
-                    else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!w")){
+                    else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!w")) {
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + weather.getForecast(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))) + "\n");
                         System.out.println(line);
                         System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + weather.getForecast(parser.nWordFromMsg(parser.msg(line), 2)) + "\n");
                         kirjoittaja.flush();
                     }
-                    
                     else if (parser.msg(line).contains("https://") || parser.msg(line).contains("http://")) {
                         String title = htmltool.getPageTitle(htmltool.getSource(parser.url(parser.msg(line))));
                         if (!title.equals("")) {
@@ -127,25 +132,22 @@ public class Botti {
                             kirjoittaja.flush();
                         }
                     }
-                    
-                    else if(parser.protocolMsg(line).contains("JOIN") && usermodes.getOpList().containsKey(parser.getAddy(parser.protocolMsg(line)))){
+                    else if (parser.protocolMsg(line).contains("JOIN") && usermodes.getOpList().containsKey(parser.getAddy(parser.protocolMsg(line)))) {
                         System.out.println(line);
-                        if(usermodes.getUsersOpChannels(parser.getAddy(parser.protocolMsg(line))).contains(parser.channelProt(parser.channelProt(line)))){
-                            kirjoittaja.write("MODE " + parser.channelProt(parser.protocolMsg(line))+ " +o "+ parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
-                            System.out.print("Vastaus: MODE " + parser.channelProt(parser.protocolMsg(line))+ " +o "+ parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
+                        if (usermodes.getUsersOpChannels(parser.getAddy(parser.protocolMsg(line))).contains(parser.channelProt(parser.channelProt(line)))) {
+                            kirjoittaja.write("MODE " + parser.channelProt(parser.protocolMsg(line)) + " +o " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
+                            System.out.print("Vastaus: MODE " + parser.channelProt(parser.protocolMsg(line)) + " +o " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
                             kirjoittaja.flush();
                         }
                     }
-                    
-                    else if(parser.protocolMsg(line).contains("JOIN") && usermodes.getVoiceList().containsKey(parser.getAddy(parser.protocolMsg(line)))){
+                    else if (parser.protocolMsg(line).contains("JOIN") && usermodes.getVoiceList().containsKey(parser.getAddy(parser.protocolMsg(line)))) {
                         System.out.println(line);
-                        if(usermodes.getUsersVoiceChannels(parser.getAddy(parser.protocolMsg(line))).contains(parser.channelProt(parser.channelProt(line)))){
-                            kirjoittaja.write("MODE " + parser.channelProt(parser.protocolMsg(line))+ " +v "+ parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
-                            System.out.print("Vastaus: MODE " + parser.channelProt(parser.protocolMsg(line))+ " +v "+ parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
+                        if (usermodes.getUsersVoiceChannels(parser.getAddy(parser.protocolMsg(line))).contains(parser.channelProt(parser.channelProt(line)))) {
+                            kirjoittaja.write("MODE " + parser.channelProt(parser.protocolMsg(line)) + " +v " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
+                            System.out.print("Vastaus: MODE " + parser.channelProt(parser.protocolMsg(line)) + " +v " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
                             kirjoittaja.flush();
                         }
                     }
-                    
                     else {
                         System.out.println(line);
                     }
