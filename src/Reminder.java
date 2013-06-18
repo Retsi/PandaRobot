@@ -41,7 +41,7 @@ public class Reminder extends Thread {
         while(passedTime < milliseconds){
             passedTime = System.currentTimeMillis()-currentTime;
         }
-        writer.write("PRIVMSG " + channel + " :" + nick + ": remember "+ msg + "\n");
+        writer.write("PRIVMSG " + channel + " :" + nick + ": Remember "+ msg + "\n");
         writer.flush();
     }
     
