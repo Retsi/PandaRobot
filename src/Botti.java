@@ -24,36 +24,33 @@ public class Botti {
     private Weather weather;
     private EnabledFunctions functions;
     private String masteraddy = "";
-    
-    ArrayList<String> channels;
+    private ArrayList<String> channels;
+    private String nick = "";
 
-    public Botti(String server, int port) {
+    public Botti(String server, int port, String nick, String masteraddy, ArrayList<String> channels) {
         this.portti = port;
         this.serveri = server;
         this.parser = new Parser();
         this.htmltool = new HTMLtool();
-        this.usermodes = new UserModes();
+        this.usermodes = new UserModes(server);
         this.weather = new Weather();
+        this.masteraddy = masteraddy;
+        this.nick = nick;
+        this.channels = channels;
+        this.functions = new EnabledFunctions(channels);
 
     }
 
     public void connect() throws IOException {
 
         try {
-            
-            this.channels = new ArrayList<String>();
-//            channels.add("#supadeltat");
-            channels.add("#testi123");
-            functions = new EnabledFunctions(channels);
 
             socket = new Socket(serveri, portti);
             lukija = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             kirjoittaja = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-            masteraddy = "@cs27003181.pp.htv.fi";
-
-            kirjoittaja.write("NICK PandaRobot\n");
-            kirjoittaja.write("USER PandaRobot 0 * :PandaRobot\n");
+            kirjoittaja.write("NICK "+nick+"\n");
+            kirjoittaja.write("USER "+nick+" 0 * :"+nick+"\n");
             kirjoittaja.flush();
 
             System.out.println("Status ok");
@@ -61,7 +58,6 @@ public class Botti {
             while (true) {
                 while ((line = lukija.readLine()) != null) {
                     if (parser.nWordFromMsg(parser.protocolMsg(line), 2).contains("001")) {
-                        kirjoittaja.write("JOIN #testi123\n");
                         for(String channel : channels){
                             kirjoittaja.write("JOIN " +channel+"\n");
                         }
@@ -74,7 +70,7 @@ public class Botti {
                         System.out.print("Vastaus: PONG :" + parser.msg(line) + "\n");
                         kirjoittaja.flush();
                     }
-                    else if (parser.msg(line).equals("PandaRobot") && !parser.protocolMsg(line).contains("=")){
+                    else if (parser.msg(line).equals(nick) && !parser.protocolMsg(line).contains("=")){
                         System.out.println(line);
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Usage: !w [location], !remind [time in minutes] (parameters), !addop [addy], !addvoice [addy], !removeop [addy], !removevoice [addy], !echo [msg], !raw [raw irc-protocol msg], !enable [function], !disable [function]\n");
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Functions: echo, raw, reminder, urltitle, usermodes, weather\n");

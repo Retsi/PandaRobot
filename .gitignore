@@ -3,3 +3,4 @@ nbproject/
 *.mf
 *.xml
 /build/
+/dist/

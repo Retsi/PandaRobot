@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -8,7 +9,10 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        Botti bot = new Botti("fi.quakenet.org", 6667);
+        
+        ArrayList quakenet = new ArrayList<String>();
+        quakenet.add("#testi123");
+        Botti bot = new Botti("fi.quakenet.org", 6667, "PandaRobot", "@cs27003181.pp.htv.fi", quakenet);
         
         bot.connect();
         
