@@ -63,6 +63,7 @@ public class HTMLtool {
                             title = title.substring(0, title.length()-1);
                         if(title.equals(" "))
                             title = "";
+                        title = replaceHTMLEntities(title);
                         return title;
                             
                     } else {
@@ -71,7 +72,23 @@ public class HTMLtool {
                 }
             }
         }
+        title = replaceHTMLEntities(title);
 
+        return title;
+    }
+    
+    public String replaceHTMLEntities(String t){
+        String title = t;
+        title = title.replace("&quot;", "\"");
+        title = title.replace("&apos;", "'");
+        title = title.replace("&amp;", "&");
+        title = title.replace("&lt;", "<");
+        title = title.replace("&gt;", ">");
+        title = title.replace("&#34;", "\"");
+        title = title.replace("&#39;", "'");
+        title = title.replace("&#38;", "&");
+        title = title.replace("&#60", "<");
+        title = title.replace("&#62;", ">");
         return title;
     }
 }
