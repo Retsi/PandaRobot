@@ -22,6 +22,7 @@ public class Botti {
     private HTMLtool htmltool;
     private UserModes usermodes;
     private Weather weather;
+    private HSL hsl;
     private EnabledFunctions functions;
     private String masteraddy = "";
     private ArrayList<String> channels;
@@ -38,6 +39,7 @@ public class Botti {
         this.nick = nick;
         this.channels = channels;
         this.functions = new EnabledFunctions(channels);
+        this.hsl = new HSL();
 
     }
 
@@ -72,14 +74,20 @@ public class Botti {
                     }
                     else if (parser.msg(line).equals(nick) && !parser.protocolMsg(line).contains("=")){
                         System.out.println(line);
-                        kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Usage: !w [location], !remind [time in minutes] (parameters), !addop [addy], !addvoice [addy], !removeop [addy], !removevoice [addy], !echo [msg], !raw [raw irc-protocol msg], !enable [function], !disable [function]\n");
-                        kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Functions: echo, raw, reminder, urltitle, usermodes, weather\n");
+                        kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Usage: !w [location], !remind [time in minutes] (parameters), !hsl [start]. [finish], !addop [addy], !addvoice [addy], !removeop [addy], !removevoice [addy], !echo [msg], !raw [raw irc-protocol msg], !enable [function], !disable [function]\n");
+                        kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Functions: echo, hsl, raw, reminder, urltitle, usermodes, weather\n");
                         kirjoittaja.flush();
                     }
                     else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!echo") && functions.getFunctionStatusOnChannel(parser.channelProt(parser.protocolMsg(line)), "echo")) {
                         kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + parser.everythingElseExceptFirstWordFromMsg(parser.msg(line)) + "\n");
                         System.out.println(line);
                         System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + parser.everythingElseExceptFirstWordFromMsg(parser.msg(line)) + "\n");
+                        kirjoittaja.flush();
+                    }
+                    else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!hsl") && functions.getFunctionStatusOnChannel(parser.channelProt(parser.protocolMsg(line)), "hsl")) {
+                        kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + hsl.getDirections(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))) + "\n");
+                        System.out.println(line);
+                        System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + hsl.getDirections(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))) + "\n");
                         kirjoittaja.flush();
                     }
                     else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!remind") && functions.getFunctionStatusOnChannel(parser.channelProt(parser.protocolMsg(line)), "reminder")) {

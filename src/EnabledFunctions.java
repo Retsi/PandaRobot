@@ -53,6 +53,7 @@ class Functions{
         functions.put("urltitle", true);
         functions.put("echo", true);
         functions.put("raw", true);
+        functions.put("hsl", true);
     }
     
     public HashMap<String, Boolean> getFunctions(){
