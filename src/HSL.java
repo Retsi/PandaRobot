@@ -187,6 +187,8 @@ public class HSL {
                 reader.nextLine();
                 i++;
             }
+            if(what.equals("") || where.equals(""))
+                return "walk";
 
         return what + ", " + where + ", " + when;
     }

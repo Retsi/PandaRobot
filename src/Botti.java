@@ -96,9 +96,9 @@ public class Botti {
 
                             Reminder reminder = new Reminder(kirjoittaja, Integer.parseInt(parser.nWordFromMsg(parser.msg(line), 2)), parser.everythingElseExceptFirstWordFromMsg(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))), parser.channelProt(parser.protocolMsg(line)), parser.nickProtMsg(parser.protocolMsg(line)));
                             reminder.start();
-                            kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :initialed\n");
+                            kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :initiated\n");
                             kirjoittaja.flush();
-                            System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :initialed\n");
+                            System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :initiated\n");
                         } catch (NumberFormatException e) {
                             kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Missing time parameter\n");
                             kirjoittaja.flush();
