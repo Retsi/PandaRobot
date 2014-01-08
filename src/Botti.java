@@ -93,12 +93,18 @@ public class Botti {
                     else if (parser.nWordFromMsg(parser.msg(line), 1).equals("!remind") && functions.getFunctionStatusOnChannel(parser.channelProt(parser.protocolMsg(line)), "reminder")) {
                         System.out.println(line);
                         try {
+                            if(Integer.parseInt(parser.nWordFromMsg(parser.msg(line), 2)) < 0){
+                                kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Negative time parameter\n");
+                                kirjoittaja.flush();
+                            }
+                            else{
 
-                            Reminder reminder = new Reminder(kirjoittaja, Integer.parseInt(parser.nWordFromMsg(parser.msg(line), 2)), parser.everythingElseExceptFirstWordFromMsg(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))), parser.channelProt(parser.protocolMsg(line)), parser.nickProtMsg(parser.protocolMsg(line)));
-                            reminder.start();
-                            kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :initiated\n");
-                            kirjoittaja.flush();
-                            System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :initiated\n");
+                                Reminder reminder = new Reminder(kirjoittaja, Integer.parseInt(parser.nWordFromMsg(parser.msg(line), 2)), parser.everythingElseExceptFirstWordFromMsg(parser.everythingElseExceptFirstWordFromMsg(parser.msg(line))), parser.channelProt(parser.protocolMsg(line)), parser.nickProtMsg(parser.protocolMsg(line)));
+                                reminder.start();
+                                kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :initiated\n");
+                                kirjoittaja.flush();
+                                System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :initiated\n");
+                            }
                         } catch (NumberFormatException e) {
                             kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Missing time parameter\n");
                             kirjoittaja.flush();
@@ -163,7 +169,7 @@ public class Botti {
                         System.out.print("Vastaus: PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :" + weather.getForecast(parser.nWordFromMsg(parser.msg(line), 2)) + "\n");
                         kirjoittaja.flush();
                     }
-                    else if (parser.msg(line).contains("https://") || parser.msg(line).contains("http://") && functions.getFunctionStatusOnChannel(parser.channelProt(parser.protocolMsg(line)), "urltitle")) {
+                    else if (parser.msg(line).contains("https://") && functions.getFunctionStatusOnChannel(parser.channelProt(parser.protocolMsg(line)), "urltitle") || parser.msg(line).contains("http://") && functions.getFunctionStatusOnChannel(parser.channelProt(parser.protocolMsg(line)), "urltitle")) {
                         String title = htmltool.getPageTitle(htmltool.getSource(parser.url(parser.msg(line))));
                         if (!title.equals("")) {
                             kirjoittaja.write("PRIVMSG " + parser.channelProt(parser.protocolMsg(line)) + " :Page title: [ " + title + " ]\n");
@@ -187,6 +193,14 @@ public class Botti {
                             System.out.print("Vastaus: MODE " + parser.channelProt(parser.protocolMsg(line)) + " +v " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
                             kirjoittaja.flush();
                         }
+                    }
+                    else if(parser.protocolMsg(line).contains("ERROR :Closing Link:")){
+                        long currentTime = System.currentTimeMillis();
+                        long passedTime = 0;
+                        while(passedTime < 300000){
+                            passedTime = System.currentTimeMillis() - currentTime;
+                        }
+                        connect();
                     }
                     else {
                         System.out.println(line);

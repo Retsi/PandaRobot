@@ -89,6 +89,20 @@ public class HTMLtool {
         title = title.replace("&#38;", "&");
         title = title.replace("&#60", "<");
         title = title.replace("&#62;", ">");
+        title = title.replace("&auml;", "ä");
+        title = title.replace("&ouml;", "ö");
+        title = title.replace("&Auml;", "Ä");
+        title = title.replace("&Ouml;", "Ö");
+        title = title.replace("&#228;", "ä");
+        title = title.replace("&#246;", "ö");
+        title = title.replace("&#196;", "Ä");
+        title = title.replace("&#214;", "Ö");
+        title = title.replace("&ndash;", "–");
+        title = title.replace("&#8211;", "–");
+        title = title.replace("&mdash;", "—");
+        title = title.replace("&#8212;", "—");
+        
+        
         return title;
     }
 }
