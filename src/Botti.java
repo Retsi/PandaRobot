@@ -194,7 +194,7 @@ public class Botti {
                             kirjoittaja.flush();
                         }
                     }
-                    else if(parser.protocolMsg(line).contains("ERROR :Closing Link:")){
+                    else if(parser.protocolMsg(line).equals("ERROR ") && line.contains("ERROR :Closing Link:")){
                         long currentTime = System.currentTimeMillis();
                         long passedTime = 0;
                         while(passedTime < 300000){
