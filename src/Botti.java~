@@ -194,7 +194,7 @@ public class Botti {
                             kirjoittaja.flush();
                         }
                     }
-                    else if(parser.protocolMsg(line).equals("ERROR ") && line.contains("ERROR :Closing Link:") || parser.protocolMsg(line).equals("ERROR ") && line.contains("ERROR :Ping timeout")){
+                    else if(parser.protocolMsg(line).equals("ERROR ") && line.contains("ERROR :Closing Link:")){
                         long currentTime = System.currentTimeMillis();
                         long passedTime = 0;
                         while(passedTime < 300000){
