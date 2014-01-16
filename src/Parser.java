@@ -15,7 +15,7 @@ public class Parser {
         
         for(int i = 1; i < msg.length(); i++){
             if(msg.charAt(i) == ':'){
-                ret = msg.substring(0, i);
+                return  msg.substring(0, i);
             }
         }
         return ret;
