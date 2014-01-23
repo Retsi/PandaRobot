@@ -101,10 +101,7 @@ public class HTMLtool {
         title = title.replace("&#8211;", "–");
         title = title.replace("&mdash;", "—");
         title = title.replace("&#8212;", "—");
-	title = title.replace("&#039;", "'");
-	title = title.replace("&#8217;", "´");
-        title = title.replace("&#064;", "@");
-	title = title.replace("&euro;", "€");
+        
         
         return title;
     }
