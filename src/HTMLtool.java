@@ -107,6 +107,7 @@ public class HTMLtool {
 	title = title.replace("&euro;", "€");
 	title = title.replace("&laquo;", "«");
 	title = title.replace("&raquo;", "»");
+	title = title.replace("&#034;", "\"");
 
         return title;
     }
