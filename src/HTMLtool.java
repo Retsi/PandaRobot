@@ -108,6 +108,7 @@ public class HTMLtool {
 	title = title.replace("&laquo;", "«");
 	title = title.replace("&raquo;", "»");
 	title = title.replace("&#034;", "\"");
+	title = title.replace("&bull;", "•");
 
         return title;
     }
