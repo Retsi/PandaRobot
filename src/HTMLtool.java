@@ -112,6 +112,7 @@ public class HTMLtool {
 	title = title.replace("&#8230;", "…");
 	title = title.replace("&nbsp;", " ");
 	title = title.replace("&#160;", " ");
+	title = title.replace("&#124;", "|");
 
         return title;
     }
