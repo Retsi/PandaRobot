@@ -181,16 +181,16 @@ public class Botti {
                     else if (parser.protocolMsg(line).contains("JOIN") && usermodes.getOpList().containsKey(parser.getAddy(parser.protocolMsg(line))) && functions.getFunctionStatusOnChannel(parser.channelProt(parser.protocolMsg(line)), "usermodes")) {
                         System.out.println(line);
                         if (usermodes.getUsersOpChannels(parser.getAddy(parser.protocolMsg(line))).contains(parser.channelProt(parser.channelProt(line)))) {
-                            kirjoittaja.write("MODE " + parser.channelProt(parser.protocolMsg(line)) + " +o " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
-                            System.out.print("Vastaus: MODE " + parser.channelProt(parser.protocolMsg(line)) + " +o " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
+                            kirjoittaja.write("MODE " + parser.channelProt(line) + " +o " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
+                            System.out.print("Vastaus: MODE " + parser.channelProt(line) + " +o " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
                             kirjoittaja.flush();
                         }
                     }
                     else if (parser.protocolMsg(line).contains("JOIN") && usermodes.getVoiceList().containsKey(parser.getAddy(parser.protocolMsg(line))) && functions.getFunctionStatusOnChannel(parser.channelProt(parser.protocolMsg(line)), "usermodes")) {
                         System.out.println(line);
                         if (usermodes.getUsersVoiceChannels(parser.getAddy(parser.protocolMsg(line))).contains(parser.channelProt(parser.channelProt(line)))) {
-                            kirjoittaja.write("MODE " + parser.channelProt(parser.protocolMsg(line)) + " +v " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
-                            System.out.print("Vastaus: MODE " + parser.channelProt(parser.protocolMsg(line)) + " +v " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
+                            kirjoittaja.write("MODE " + parser.channelProt(line) + " +v " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
+                            System.out.print("Vastaus: MODE " + parser.channelProt(line) + " +v " + parser.nickProtMsg(parser.protocolMsg(line)) + "\n");
                             kirjoittaja.flush();
                         }
                     }

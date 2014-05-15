@@ -12,7 +12,7 @@ public class Main {
         
         ArrayList quakenet = new ArrayList<String>();
         quakenet.add("#testi123");
-        Botti bot = new Botti("fi.quakenet.org", 6667, "PandaRobot", "@cs27003181.pp.htv.fi", quakenet);
+        Botti bot = new Botti("irc.cs.hut.fi", 6667, "PandaRobott", "@cs27003181.pp.htv.fi", quakenet);
         
         bot.connect();
         
