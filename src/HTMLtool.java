@@ -113,6 +113,10 @@ public class HTMLtool {
 	title = title.replace("&nbsp;", " ");
 	title = title.replace("&#160;", " ");
 	title = title.replace("&#124;", "|");
+        title = title.replace("&#174;", "®");
+        title = title.replace("&#8221;", "\"");
+        title = title.replace("&#045;", "-");
+        
 
         return title;
     }
